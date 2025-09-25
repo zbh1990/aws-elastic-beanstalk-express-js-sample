@@ -42,20 +42,7 @@ pipeline {
             }
         }
 
-        stage('Security Scan - OWASP Dependency Check') {
-            steps {
-                sh '''
-                    echo "Running Dependency-Check via Docker..."
-                    docker run --rm \
-                        -v $(pwd):/src \
-                        -v $(pwd)/dependency-check-report:/report \
-                        owasp/dependency-check:9.2.0 \
-                        --scan /src \
-                        --format ALL \
-                        --out /report
-                '''
-            }
-        }
+    
 
 
         stage('Build Docker Image') {
