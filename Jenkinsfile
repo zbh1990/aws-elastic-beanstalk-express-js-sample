@@ -50,6 +50,7 @@ pipeline {
                     curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v9.2.0/dependency-check-9.2.0-release.zip
                     unzip -o dependency-check.zip -d /tmp/dependency-check
                     /tmp/dependency-check/dependency-check/bin/dependency-check.sh \
+                        --noupdate \
                         --project "NodeApp" \
                         --scan . \
                         --format ALL \
