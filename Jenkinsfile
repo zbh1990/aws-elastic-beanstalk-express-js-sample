@@ -45,21 +45,18 @@ pipeline {
         stage('Security Scan - OWASP Dependency Check') {
             steps {
                 sh '''
-                    echo "Running OWASP Dependency-Check..."
-                    mkdir -p dependency-check-report
-                    curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v9.2.0/dependency-check-9.2.0-release.zip
-                    unzip -o dependency-check.zip -d /tmp/dependency-check
-                    /tmp/dependency-check/dependency-check/bin/dependency-check.sh \
-                        --noupdate \
-                        --project "NodeApp" \
-                        --scan . \
+                    echo "Running Dependency-Check via Docker..."
+                    docker run --rm \
+                        -v $(pwd):/src \
+                        -v $(pwd)/dependency-check-report:/report \
+                        owasp/dependency-check:9.2.0 \
+                        --scan /src \
                         --format ALL \
-                        --out dependency-check-report
-
-                    echo "Dependency-Check completed. Reports saved in dependency-check-report/"
+                        --out /report
                 '''
             }
         }
+
 
         stage('Build Docker Image') {
             steps {
