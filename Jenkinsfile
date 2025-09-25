@@ -13,6 +13,17 @@ pipeline {
     }
 
     stages {
+
+        stage('Install Java for Dependency Check') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y openjdk-17-jdk unzip curl
+                    java -version
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/zbh1990/aws-elastic-beanstalk-express-js-sample.git'
