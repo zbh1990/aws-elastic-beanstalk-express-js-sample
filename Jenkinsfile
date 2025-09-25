@@ -46,16 +46,16 @@ pipeline {
             steps {
                 sh '''
                     echo "Running OWASP Dependency-Check..."
+                    mkdir -p dependency-check-report
                     curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v9.2.0/dependency-check-9.2.0-release.zip
-                    unzip dependency-check.zip -d /tmp/dependency-check
+                    unzip -o dependency-check.zip -d /tmp/dependency-check
                     /tmp/dependency-check/dependency-check/bin/dependency-check.sh \
                         --project "NodeApp" \
                         --scan . \
-                        --format "ALL" \
+                        --format ALL \
                         --out dependency-check-report
 
-                    echo "== Dependency-Check Summary =="
-                    cat dependency-check-report/dependency-check-report.html | grep "High" || true
+                    echo "Dependency-Check completed. Reports saved in dependency-check-report/"
                 '''
             }
         }
