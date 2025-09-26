@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "app"
+        APP_NAME = "aws-app"
         DOCKER_REGISTRY = "docker.io/balalabalala"
         DOCKER_IMAGE = "${DOCKER_REGISTRY}/${APP_NAME}:${env.BUILD_NUMBER}"
     }
