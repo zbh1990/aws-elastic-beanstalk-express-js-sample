@@ -2,27 +2,17 @@ pipeline {
     agent {
         docker {
             image 'node:16-bullseye'
-            args '-u root:root'
+            args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     environment {
         APP_NAME = "app"
-        DOCKER_REGISTRY = "docker.io/balalabalala" 
+        DOCKER_REGISTRY = "docker.io/你的DockerHub用户名"
         DOCKER_IMAGE = "${DOCKER_REGISTRY}/${APP_NAME}:${env.BUILD_NUMBER}"
     }
 
     stages {
-
-        stage('Install Java for Dependency Check') {
-            steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y openjdk-17-jdk unzip curl
-                    java -version
-                '''
-            }
-        }
 
         stage('Checkout') {
             steps {
@@ -32,18 +22,31 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install --save'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test || true'
+                sh 'npm test'
             }
         }
 
-    
-
+        stage('Security Scan - OWASP Dependency Check') {
+            steps {
+                sh '''
+                    echo "Running Dependency-Check via Docker..."
+                    docker run --rm \
+                        -v $(pwd):/src \
+                        -v $(pwd)/dependency-check-report:/report \
+                        owasp/dependency-check:9.2.0 \
+                        --scan /src \
+                        --format ALL \
+                        --out /report \
+                        --failOnCVSS 7
+                '''
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -65,11 +68,10 @@ pipeline {
 
     post {
         success {
-            echo " Pipeline completed successfully"
+            echo "Pipeline completed successfully"
         }
         failure {
-            echo " Pipeline failed"
+            echo "Pipeline failed"
         }
     }
 }
-
