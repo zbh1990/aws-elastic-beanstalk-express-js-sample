@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         APP_NAME = "app"
-        DOCKER_REGISTRY = "docker.io/你的DockerHub用户名"
+        DOCKER_REGISTRY = "docker.io/balalabalala"
         DOCKER_IMAGE = "${DOCKER_REGISTRY}/${APP_NAME}:${env.BUILD_NUMBER}"
     }
 
@@ -42,21 +42,15 @@ pipeline {
             }
         }
 
-        stage('Security Scan - OWASP Dependency Check') {
+        stage('Security Scan - npm audit') {
             steps {
                 sh '''
-                    echo "Running Dependency-Check via Docker..."
-                    docker run --rm \
-                        -v $(pwd):/src \
-                        -v $(pwd)/dependency-check-report:/report \
-                        owasp/dependency-check:9.2.0 \
-                        --scan /src \
-                        --format ALL \
-                        --out /report \
-                        --failOnCVSS 7
+                    echo "Running npm audit..."
+                    npm audit --audit-level=high
                 '''
             }
         }
+
 
         stage('Build Docker Image') {
             steps {
