@@ -42,12 +42,16 @@ pipeline {
             }
         }
 
-        stage('Security Scan - npm audit') {
+        stage('Security Scan - Snyk') {
             steps {
-                sh '''
-                    echo "Running npm audit..."
-                    npm audit --audit-level=high
-                '''
+                withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
+                    sh '''
+                        echo "Running Snyk security scan..."
+                        npm install -g snyk
+                        snyk auth $SNYK_TOKEN
+                        snyk test --severity-threshold=high
+                    '''
+                }
             }
         }
 
