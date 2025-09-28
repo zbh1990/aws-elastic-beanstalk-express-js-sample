@@ -118,6 +118,16 @@ pipeline {
           }
         }
       }
+      // 直接从 /var/log/jenkins/ 拷审计日志
+        sh '''
+        set -e
+        if [ -f /var/log/jenkins/audit.log ]; then
+            cp /var/log/jenkins/audit.log logs/audit.log
+            echo "Copied /var/log/jenkins/audit.log -> logs/audit.log"
+        else
+            echo "audit.log not found at /var/log/jenkins/audit.log (skipping)"
+        fi
+        '''
     }
 
   }
