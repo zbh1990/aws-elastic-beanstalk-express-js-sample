@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:16-bullseye'
-            args '-u root:root'
-        }
-    }
+    agent any  
 
     environment {
         APP_NAME = "aws-app"
@@ -35,7 +30,13 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:16-bullseye'
+                    args '-u root:root'
+                }
+            }
             steps {
                 sh 'npm install --save'
             }
