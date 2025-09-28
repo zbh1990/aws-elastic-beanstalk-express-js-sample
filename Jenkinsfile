@@ -108,26 +108,25 @@ pipeline {
       }
     }
 
- // 把在 docker agent 里生成的日志拿回主工作区
     stage('Collect Logs') {
-      steps {
-        sh 'mkdir -p logs'
-        script {
-          ['install-log','test-log','scan-log'].each { n ->
-            try { unstash n } catch (e) { echo "No stash for ${n} (${e.message})" }
-          }
+        steps {
+            sh 'mkdir -p logs'
+            script {
+            ['install-log','test-log','scan-log'].each { n ->
+                try { unstash n } catch (e) { echo "No stash for ${n} (${e.message})" }
+            }
+            }
+            // 直接从 /var/log/jenkins/ 拷审计日志
+            sh '''
+            set -e
+            if [ -f /var/log/jenkins/audit.log ]; then
+                cp /var/log/jenkins/audit.log logs/audit.log
+                echo "Copied /var/log/jenkins/audit.log -> logs/audit.log"
+            else
+                echo "audit.log not found at /var/log/jenkins/audit.log (skipping)"
+            fi
+            '''
         }
-      }
-      // 直接从 /var/log/jenkins/ 拷审计日志
-        sh '''
-        set -e
-        if [ -f /var/log/jenkins/audit.log ]; then
-            cp /var/log/jenkins/audit.log logs/audit.log
-            echo "Copied /var/log/jenkins/audit.log -> logs/audit.log"
-        else
-            echo "audit.log not found at /var/log/jenkins/audit.log (skipping)"
-        fi
-        '''
     }
 
   }
