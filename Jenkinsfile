@@ -14,7 +14,7 @@ pipeline {
           // docker:dind settings
         DOCKER_HOST = "tcp://docker:2376"
         DOCKER_CERT_PATH = "/certs/client"
-        DOCKER_TLS_VERIFY = "
+        DOCKER_TLS_VERIFY = "1"
     }
 
     stages {
