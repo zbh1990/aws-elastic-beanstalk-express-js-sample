@@ -132,7 +132,7 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: 'logs/install.log,logs/test.log,logs/scan.log,logs/build.log,logs/push.log,logs/audit.log'
+      archiveArtifacts artifacts: 'logs/install.log,logs/test.log,logs/scan.log,logs/build.log,logs/push.log,logs/audit.log',
                         allowEmptyArchive: true, fingerprint: true
     }
     success { echo 'Pipeline completed successfully' }
