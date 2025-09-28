@@ -118,11 +118,11 @@ pipeline {
             }
             sh '''
             set -e
-            if [ -f /var/log/jenkins/audit.log ]; then
-                cp /var/log/jenkins/audit.log logs/audit.log
-                echo "Copied /var/log/jenkins/audit.log -> logs/audit.log"
+            if [ -f /var/log/jenkins/audit.log.0 ]; then
+                cp /var/log/jenkins/audit.log.0 logs/audit.log
+                echo "Copied /var/log/jenkins/audit.log.0 -> logs/audit.log"
             else
-                echo "audit.log not found at /var/log/jenkins/audit.log (skipping)"
+                echo "audit.log.0 not found at /var/log/jenkins/audit.log.0 (skipping)"
             fi
             '''
         }
