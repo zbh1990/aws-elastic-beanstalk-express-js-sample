@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                     apt-get update
-                    apt-get install -y docker.io
+                    apt-get install -y docker-ce-cli
                     docker --version
                 '''
             }
