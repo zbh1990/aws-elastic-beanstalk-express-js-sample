@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:16-bullseye'
-            args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-u root:root'
         }
     }
 
@@ -10,6 +10,11 @@ pipeline {
         APP_NAME = "aws-app"
         DOCKER_REGISTRY = "docker.io/balalabalala"
         DOCKER_IMAGE = "${DOCKER_REGISTRY}/${APP_NAME}:${env.BUILD_NUMBER}"
+
+          // docker:dind settings
+        DOCKER_HOST = "tcp://docker:2376"
+        DOCKER_CERT_PATH = "/certs/client"
+        DOCKER_TLS_VERIFY = "
     }
 
     stages {
