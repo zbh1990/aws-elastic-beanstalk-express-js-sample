@@ -116,7 +116,6 @@ pipeline {
                 try { unstash n } catch (e) { echo "No stash for ${n} (${e.message})" }
             }
             }
-            // 直接从 /var/log/jenkins/ 拷审计日志
             sh '''
             set -e
             if [ -f /var/log/jenkins/audit.log ]; then
@@ -133,7 +132,7 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: 'logs/install.log,logs/test.log,logs/scan.log,logs/build.log,logs/push.log',
+      archiveArtifacts artifacts: 'logs/install.log,logs/test.log,logs/scan.log,logs/build.log,logs/push.log,logs/audit.log'
                         allowEmptyArchive: true, fingerprint: true
     }
     success { echo 'Pipeline completed successfully' }
