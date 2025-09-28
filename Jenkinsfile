@@ -14,7 +14,21 @@ pipeline {
 
     stages {
 
-        
+        stage('Bootstrap docker CLI on controller') {
+            steps {
+                sh '''
+                set -e
+                apt-get update
+                apt-get install -y curl gnupg lsb-release || true
+                curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - || true
+                echo "deb [arch=amd64] https://www.download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list || true
+                apt-get update || true
+                apt-get install -y docker-ce-cli || apt-get install -y docker.io
+                docker --version
+                '''
+            }
+        }
+                
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/zbh1990/aws-elastic-beanstalk-express-js-sample.git'
