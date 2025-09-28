@@ -87,6 +87,11 @@ pipeline {
       }
     }
 
+
+
+   
+
+
     stage('Push Docker Image') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials',
@@ -102,6 +107,19 @@ pipeline {
         }
       }
     }
+
+ // 把在 docker agent 里生成的日志拿回主工作区
+    stage('Collect Logs') {
+      steps {
+        sh 'mkdir -p logs'
+        script {
+          ['install-log','test-log','scan-log'].each { n ->
+            try { unstash n } catch (e) { echo "No stash for ${n} (${e.message})" }
+          }
+        }
+      }
+    }
+
   }
 
   post {
