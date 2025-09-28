@@ -15,19 +15,16 @@ pipeline {
     stages {
 
         stage('Bootstrap docker CLI on controller') {
+            agent any
             steps {
                 sh '''
-                set -e
+                set -eux
                 apt-get update
-                apt-get install -y curl gnupg lsb-release || true
-                curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - || true
-                echo "deb [arch=amd64] https://www.download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list || true
-                apt-get update || true
-                apt-get install -y docker-ce-cli || apt-get install -y docker.io
+                apt-get install -y docker.io
                 docker --version
                 '''
             }
-        }
+            }
                 
         stage('Checkout') {
             steps {
