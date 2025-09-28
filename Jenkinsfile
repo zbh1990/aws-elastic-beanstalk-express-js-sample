@@ -36,7 +36,7 @@ pipeline {
          stage('Install Dependencies') {
             agent {
                 docker {
-                    image 'node:16-bullseye'
+                    image 'node:16'
                     args '-u root:root'
                 }
             }
