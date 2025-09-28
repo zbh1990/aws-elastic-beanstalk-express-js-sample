@@ -14,16 +14,7 @@ pipeline {
 
     stages {
 
-        stage('Install Docker CLI') {
-            steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y docker-ce-cli
-                    docker --version
-                '''
-            }
-        }
-
+        
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/zbh1990/aws-elastic-beanstalk-express-js-sample.git'
@@ -64,7 +55,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                sh "DOCKER_HOST=$DOCKER_HOST docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
