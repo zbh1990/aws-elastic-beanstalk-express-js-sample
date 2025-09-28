@@ -40,6 +40,7 @@ pipeline {
             npm install --save 2>&1 | tee logs/install.log
           '
         '''
+        stash name: 'install-log', includes: 'logs/install.log'
       }
     }
 
@@ -53,6 +54,7 @@ pipeline {
             npm test 2>&1 | tee logs/test.log
           '
         '''
+        stash name: 'test-log', includes: 'logs/test.log'
       }
     }
 
@@ -70,6 +72,7 @@ pipeline {
             '
           '''
         }
+         stash name: 'scan-log', includes: 'logs/scan.log'
       }
     }
 
