@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:16'
-      args '-u root:root'
-    }
-  }
+  agent any
 
   environment {
     APP_NAME          = "aws-app"
